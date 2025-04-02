@@ -1,11 +1,10 @@
 from math import e
 from airflow import DAG
-from airflow.providers.http.sensors.http import HttpSensor  # type: ignore
-from airflow.providers.http.operators.http import SimpleHttpOperator  # type: ignore
-from airflow.providers.postgres.hooks.postgres import PostgresHook  # type: ignore
+from airflow.providers.http.sensors.http import HttpSensor
+from airflow.providers.http.operators.http import SimpleHttpOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from airflow.operators.email import EmailOperator
 from airflow.models import Variable
 from datetime import datetime, timedelta, timezone
 import json
