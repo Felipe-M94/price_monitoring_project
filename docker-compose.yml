@@ -1,0 +1,51 @@
+services:
+  airflow:
+    image: apache/airflow:2.7.3
+    container_name: crypto_airflow
+    restart: always
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://crypto_user:crypto_pass@postgres:5432/crypto_db
+      - AIRFLOW_VAR_CMC_API_KEY=
+      - AIRFLOW_VAR_CMC_API_URL=
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_POOL_RECYCLE=3600
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./airflow-logs:/opt/airflow/logs
+      - ./crypto_prices_transformation:/opt/airflow/dbt
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      bash -c "pip install apache-airflow-providers-http==4.6.0 &&
+               airflow db upgrade &&
+               airflow db init &&
+               airflow users create --username admin --password admin --firstname Felipe --lastname Crypto --role Admin --email admin@example.com &&
+               (airflow webserver & airflow scheduler)"
+
+  postgres:
+    image: postgres:15
+    container_name: crypto_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: crypto_user
+      POSTGRES_PASSWORD: crypto_pass
+      POSTGRES_DB: crypto_db
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crypto_user -d crypto_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres-backups:/backups
+    ports:
+      - "5433:5432"
+
+volumes:
+  postgres_data:
+  airflow-logs:

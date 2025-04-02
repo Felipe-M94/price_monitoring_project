@@ -1,0 +1,26 @@
+# Logs
+airflow-logs/
+logs/
+
+# Python Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+.env
+
+# Database & Backups
+postgres-backups/
+*.db
+
+# Docker
+*.pid
+docker-compose.override.yml
+
+# IDE e Sistema Operacional
+.vscode/
+.idea/
+.DS_Store

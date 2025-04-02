@@ -1,0 +1,12 @@
+crypto_prices_transformation:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      user: crypto_user
+      password: crypto_pass
+      port: 5432
+      dbname: crypto_db
+      schema: analytics
+      threads: 4

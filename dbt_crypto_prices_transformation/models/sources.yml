@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: crypto   
+    database: crypto_db  
+    schema: public  
+    tables:
+      - name: crypto_prices  
+        description: "Tabela bruta com os preços das criptomoedas"
+        columns:
+          - name: name
+            description: "Nome da criptomoeda"
+          - name: symbol
+            description: "Símbolo da criptomoeda"
+          - name: price
+            description: "Preço da criptomoeda em USD"
+            tests:
+              - not_null
+          - name: last_updated
+            description: "Última atualização do preço"
+            tests:
+              - not_null
