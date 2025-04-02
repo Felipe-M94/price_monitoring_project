@@ -1,65 +1,92 @@
-# Price Monitoring Project
+# Monitoramento de Preços de Criptomoedas
 
-## Visão Geral
-O **Price Monitoring Project** é uma solução para coleta, processamento e visualização de preços de criptomoedas. Utiliza Apache Airflow para orquestração, PostgreSQL como banco de dados e Grafana para visualizações.
+Este projeto realiza a coleta, processamento e visualização de dados de preços de criptomoedas utilizando Apache Airflow, PostgreSQL, dbt e Grafana. A arquitetura é baseada em Docker para facilitar a implantação.
 
-## Tecnologias Utilizadas
-- **Apache Airflow**: Automação e agendamento de tarefas.
-- **PostgreSQL**: Armazenamento dos dados coletados.
-- **Grafana**: Visualização de métricas.
-- **dbt (Data Build Tool)**: Transformação e modelagem de dados.
-- **Docker**: Utilizado na implantação do ambiente de desenvolvimento.
+## 📌 Visão Geral
 
-## Estrutura do Projeto
+A solução coleta dados da API do CoinMarketCap, armazena no PostgreSQL, transforma os dados com dbt e os visualiza no Grafana. Tudo isso é orquestrado pelo Apache Airflow.
+
+![Arquitetura do Projeto](images/Crypto.png)
+
+## 🚀 Tecnologias Utilizadas
+
+- **Apache Airflow** - Orquestração do pipeline de dados
+- **PostgreSQL** - Armazenamento dos dados
+- **dbt** - Transformação dos dados
+- **Grafana** - Visualização dos dados
+- **Docker** - Containerização do projeto
+
+## 🛠️ Configuração e Execução
+
+### 🔧 Pré-requisitos
+
+- Docker e Docker Compose instalados
+- Conta na API do CoinMarketCap
+- Acesso ao repositório do projeto
+
+### 📦 Instalação
+
+1. Clone o repositório:
+   ```sh
+   git clone https://github.com/Felipe-M94/price_monitoring_project.git
+   cd price_monitoring_project
+   ```
+
+2. Configure as variáveis de ambiente no `.env` (caso necessário).
+
+3. Suba os containers Docker:
+   ```sh
+   docker-compose up -d
+   ```
+
+4. Acesse a interface do Airflow:
+   - URL: [http://localhost:8080](http://localhost:8080)
+   - Usuário: `admin`
+   - Senha: `admin`
+
+5. Verifique os dados no PostgreSQL:
+   ```sh
+   docker exec -it crypto_postgres psql -U crypto_user -d crypto_db
+   ```
+
+6. Abra o Grafana para visualizar os dashboards:
+   - URL: [http://localhost:3000](http://localhost:3000)
+   - Usuário padrão: `admin`
+   - Senha padrão: `admin`
+
+![Dashboard Grafana](images/Grafana.png)
+
+## 📊 Estrutura do Projeto
+
 ```
 price_monitoring_project/
-│-- dags/                 # DAGs do Apache Airflow
-│-- dbt/                  # Modelos dbt
-│-- scripts/              # Scripts auxiliares
-│-- docker-compose.yml    # Configuração dos serviços via Docker
-│-- Dockerfile            # Configuração da imagem personalizada do Airflow
-│-- README.md             # Documentação do projeto
-│-- requirements.txt      # Dependências do projeto
-│-- .gitignore            # Arquivos ignorados pelo Git
+│── dags/                    # DAGs do Apache Airflow
+│── dbt/                     # Projetos dbt
+│── grafana/                 # Configurações do Grafana
+│── images/                  # Imagens para documentação
+│── postgres/                # Configurações do PostgreSQL
+│── .gitignore               # Arquivos ignorados pelo Git
+│── docker-compose.yml       # Configuração dos containers
+│── README.md                # Documentação do projeto
 ```
 
-## Como Executar
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com/Felipe-M94/price_monitoring_project.git
-cd price_monitoring_project
-```
+## 📈 Visualizações
 
-### 2. Subir os Serviços com Docker
-```bash
-docker-compose up -d
-```
-Isso iniciará os serviços do Airflow e PostgreSQL.
+- **Variação de Preços**
+- **Média Móvel de 7 Dias**
+- **Tendência de Mercado**
 
-### 3. Acessar os Serviços
-- **Airflow UI**: http://localhost:8080 (usuário: `admin`, senha: `admin`)
-- **Grafana**: http://localhost:3000 (se configurado no `docker-compose.yml`)
-- **PostgreSQL**: `localhost:5433`, banco `crypto_db`
+## 🔄 Fluxo de Dados
 
-## DAGs do Airflow
-As DAGs responsáveis pela coleta e transformação dos dados estão no diretório `dags/` e são executadas automaticamente conforme agendamento definido.
+1. Airflow coleta dados da API do CoinMarketCap.
+2. PostgreSQL armazena os dados coletados.
+3. dbt transforma e prepara os dados.
+4. Grafana exibe dashboards interativos.
 
-## Modelagem de Dados com dbt
-Os modelos dbt estão na pasta `dbt/`, organizados em três camadas:
-1. **stg_crypto_prices**: Dados brutos extraídos da API.
-2. **silver_crypto_prices**: Dados limpos e transformados.
-3. **mart_crypto_prices_summary**: Dados agregados para visualizações.
+![Fluxo de Dados](images/Lineage-dbt.png)
 
-## Visualização no Grafana
-Os dados processados podem ser visualizados no Grafana, utilizando consultas SQL diretamente no PostgreSQL.
+## 📌 Contribuição
 
-## Personalização
-Para modificar variáveis, edite o arquivo `docker-compose.yml`.
+Sinta-se à vontade para contribuir! Faça um fork do repositório e envie um pull request com melhorias.
 
-## Espaço para Imagens
-(Aqui você pode adicionar imagens do projeto)
-
----
-### Autor
-Felipe M. 🚀
 
